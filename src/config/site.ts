@@ -15,7 +15,7 @@ export const site = {
   descriptor: "Aspiring product manager · Enterprise systems & AI · CSE (AI/ML) at IIIT Nagpur",
   location: "Mumbai, India",
   /** Canonical URL once deployed, e.g. "https://bhargavbidkar.com". Used for metadata. */
-  url: null as string | null,
+  url: "https://bhargav-bidkar.vercel.app" as string | null,
 
   contact: {
     email: "bhargav.07.bidkar@gmail.com",
