@@ -1,0 +1,260 @@
+---
+id: CF-001
+title: AI Contract-Review Decision Support
+question: Which contract clauses actually need a human to read them?
+category: ai-engineering
+premise: >-
+  An end-to-end system that classifies every clause in a contract, ranks it
+  by legal criticality, and summarises the whole document, so legal
+  professionals read the clauses that matter first.
+role: Implementation and technical work (co-authored research)
+involvement: built
+period:
+  start: 2025-08
+  end: 2025-10
+featured: true
+order: 1
+recognition:
+  - Paper presented at ICCIS 2026
+credits:
+  - >-
+    Paper: "NLP-Driven Clause Classification and Summarization for Contract
+    Documents", by Neha Titarmare, Bhargav Bidkar, Dr. Mayuri Digalwar and
+    Dr. Amol Bhopale (IIIT Nagpur). I did all of the implementation and
+    technical work.
+  - >-
+    The five-tier mapping was set by two contract practitioners and a legal
+    academic; the user study was run with five legal professionals.
+tags:
+  [LegalBERT, CUAD, GPT-4.1-mini, Clause classification, Summarisation, Streamlit, Regulated-domain AI]
+cover: ev-headline
+links:
+  - label: GitHub repository
+    href: null
+  - label: Hugging Face model
+    href: null
+  - label: ICCIS 2026 conference
+    href: https://scrs.in/conference/iccis2026
+  - label: Presentation certificate (PDF)
+    href: /certificates/iccis-2026-presentation.pdf
+evidence:
+  - id: ev-architecture
+    type: svg
+    title: System architecture
+    caption: >-
+      Five stages from upload to report: extraction and clause segmentation,
+      LegalBERT classification, tier-wise prioritisation, GPT-4.1-mini
+      summarisation, and a PDF/CSV report, joined by a Streamlit dashboard.
+    relevance: >-
+      Shows that classification, prioritisation and summarisation run as one
+      deployable workflow, which is what earlier work had kept separate.
+    provenance: illustrative
+    src: /diagrams/contract-review-pipeline.svg
+    alt: >-
+      Architecture diagram. A contract (PDF or DOC) is uploaded and segmented
+      into clauses; fine-tuned LegalBERT classifies each into one of 47 CUAD
+      categories; categories map to five criticality tiers from Critical to
+      Trivial; GPT-4.1-mini summarises overlapping 2,500-character chunks into
+      a 200–250 word hierarchical summary; the output is a PDF report and CSV.
+      A Streamlit dashboard connects input and output.
+    width: 960
+    height: 430
+    annotations:
+      - Redrawn for this site from Figure 1 of the paper.
+  - id: ev-headline
+    type: table
+    title: Headline results
+    caption: Figures from the paper, on the CUAD test set unless noted.
+    relevance: >-
+      The numbers that answer the case question: how well clauses are sorted,
+      and whether reviewers actually save time.
+    provenance: actual
+    columns: [Measure, Result]
+    rows:
+      - [Clause categories, "47"]
+      - [Classification accuracy, "77.2%"]
+      - [Weighted F1, "0.735"]
+      - [Tier agreement (Fleiss κ), "0.672"]
+      - [Summary BERTScore F1, "0.786"]
+      - [Review time saved (n = 5), "67%"]
+  - id: ev-classification
+    type: table
+    title: Clause classification against baselines
+    caption: All models fine-tuned on the same CUAD split with identical hyperparameters (paper, Table 4).
+    relevance: >-
+      Legal-domain pretraining helps, but modestly: LegalBERT matches RoBERTa
+      on accuracy and wins on precision and weighted F1.
+    provenance: actual
+    columns: [Model, Accuracy, Weighted F1, Precision, Recall]
+    rows:
+      - [Keyword rule-based, "0.531", "0.513", "0.625", "0.531"]
+      - [BERT-base, "0.756", "0.710", "0.724", "0.756"]
+      - [RoBERTa-base, "0.771", "0.732", "0.738", "0.772"]
+      - [LegalBERT (this work), "0.772", "0.735", "0.764", "0.772"]
+  - id: ev-tiers
+    type: table
+    title: The five-tier criticality mapping
+    caption: >-
+      47 CUAD categories grouped into five tiers by three legal-domain experts
+      rating independently (Fleiss κ = 0.672). Paper, Table 1.
+    relevance: >-
+      This is what turns a label into a reading order: Tier 1 clauses get
+      mandatory expert review; Tier 5 is metadata.
+    provenance: actual
+    columns: [Tier, Level, Example clause types]
+    rows:
+      - ["1", Critical, "Termination, IP ownership, liability cap"]
+      - ["2", Moderate, "Warranty duration, renewal terms, confidentiality"]
+      - ["3", Important, "Non-compete, indemnification, dispute resolution"]
+      - ["4", Low, "Notice periods, assignment, governing law"]
+      - ["5", Trivial, "Effective date, party names, document title"]
+    annotations:
+      - Disagreements on 17 of 47 categories were resolved by discussion; in 10 of those the group settled on a tier other than the raw majority.
+  - id: ev-summaries
+    type: table
+    title: Summarisation quality
+    caption: >-
+      Against human-written reference summaries for 20 CUAD test contracts
+      (paper, Table 5).
+    relevance: >-
+      GPT-4.1-mini with overlapping chunks beat BART and PEGASUS on ROUGE-1,
+      ROUGE-L and BERTScore; PEGASUS kept the edge on ROUGE-2.
+    provenance: actual
+    columns: [Model, ROUGE-1, ROUGE-2, ROUGE-L, BERTScore F1]
+    rows:
+      - [BART-large-CNN, "0.151", "0.071", "0.105", "0.757"]
+      - [PEGASUS (legal), "0.266", "0.121", "0.177", "0.768"]
+      - [GPT-4.1-mini (this work), "0.329", "0.099", "0.184", "0.786"]
+  - id: ev-user-study
+    type: table
+    title: User study with legal professionals
+    caption: Five legal professionals compared the report against manual review of the same contracts.
+    relevance: The test that matters for a decision-support tool is whether people review faster and trust it.
+    provenance: actual
+    columns: [Measure, Result]
+    rows:
+      - [Average time saved vs manual review, "67%"]
+      - [Clarity of the report, "4.1 / 5"]
+      - [Accuracy of tier assignment, "4.0 / 5"]
+    annotations:
+      - A small study (n = 5). Treat it as a strong signal, not a general claim.
+  - id: ev-certificate
+    type: image
+    title: Certificate of Presentation, ICCIS 2026
+    caption: >-
+      8th International Conference on Communication and Intelligent Systems
+      (ICCIS 2026), BITS Pilani, K K Birla Goa Campus, September 26–27, 2026.
+    relevance: >-
+      The research behind the system was presented at an international
+      conference. The certificate lists all four authors.
+    provenance: actual
+    src: /certificates/iccis-2026-presentation.png
+    alt: >-
+      Certificate of Presentation awarded to Bhargav Bidkar for presenting the
+      paper "NLP-Driven Clause Classification and Summarization for Contract
+      Documents", authored by Neha Titarmare, Bhargav Bidkar, Mayuri Digalwar
+      and Amol Bhopale, at ICCIS 2026, BITS Pilani, K K Birla Goa Campus,
+      September 26–27, 2026.
+    width: 1224
+    height: 1584
+    source:
+      label: Original certificate (PDF)
+      href: /certificates/iccis-2026-presentation.pdf
+status: verified
+todo:
+  - Add GitHub and Hugging Face URLs (they are hyperlinks on the CV but the URLs are not in the text).
+  - "Optional: screenshots of the Streamlit dashboard or a page of the generated PDF report."
+---
+
+## The Brief
+
+Contracts are long and dense. Novice readers struggle to interpret them, and
+legal professionals need real time to read each one, clause by clause, even
+though most clauses are routine and a few carry most of the risk.
+
+Earlier work had treated the pieces separately: models that classify clauses,
+and models that summarise documents. The aim here was one deployable workflow
+that does all three jobs: classify every clause, rank it by how much it
+matters, and summarise the contract, then hand a legal team a report they can
+act on.
+
+## The Hypotheses
+
+The study tested three bets:
+
+- **Domain pretraining should matter.** A model pretrained on legal text
+  (LegalBERT) should classify contract clauses better than general-purpose
+  BERT, RoBERTa, or keyword rules.
+- **Long contracts need a different summariser.** A large-context LLM fed
+  overlapping chunks and merged hierarchically should beat BART and PEGASUS,
+  which struggle with input length and factual drift on long documents.
+- **A label isn't a reading order.** Grouping the 47 clause types into a small
+  number of criticality tiers, set by legal experts, should let reviewers
+  read the riskiest clauses first.
+
+## The Investigation
+
+The pipeline runs in four stages: ingest and segment the document, classify
+each clause, map clauses to tiers and generate analytics, then summarise.
+
+**Data.** More than 13,000 expert-labelled clauses from 510 commercial
+contracts in CUAD, across 47 categories. Preprocessing removed whitespace
+artifacts, headers, footers and enumerations, detected clause boundaries from
+linguistic and punctuation cues, and produced a combined training corpus with
+a class-balanced 80/10/10 split.
+
+**Classification.** LegalBERT with a dropout layer (p = 0.1) and a linear head
+to 47 classes, fine-tuned for 3 epochs (batch size 8, learning rate 2×10⁻⁵,
+10% linear warm-up, 512-token sequences, AdamW with 0.01 weight decay) on an
+NVIDIA A100, about 22 minutes per epoch. Prediction is single-label (argmax)
+for efficiency: a deliberate simplification, since CUAD is really multi-label.
+BERT-base, RoBERTa-base and a keyword rule-based classifier were run on the
+same split with the same settings as baselines.
+
+**Summarisation.** GPT-4.1-mini, chosen over BART and PEGASUS for its larger
+context window. Contracts were split into overlapping 2,500-character chunks
+(200 characters of overlap) to keep context across clause boundaries, and the
+chunk summaries merged into one 200–250 word summary covering obligations,
+liabilities, parties and termination rights.
+
+**Prioritisation.** Two contract practitioners and a legal academic each
+assigned all 47 categories to five tiers, blind to each other (Fleiss
+κ = 0.672, substantial agreement). The 17 disagreements were settled by
+discussion.
+
+**Product.** A Streamlit interface on top, with ReportLab, Matplotlib and
+Seaborn producing a PDF report (tier distribution, clause analytics,
+visualisations and the summary) and a CSV of every clause with its label and
+tier. Stack: Python 3.10, PyTorch 2.8, Transformers 4.49, OpenAI SDK.
+
+I did all of the implementation and technical work.
+
+## The Finding
+
+On the CUAD test set, LegalBERT reached **77.2% accuracy** and a **weighted F1
+of 0.735** across 47 clause types (78.9% and 0.750 on validation). It matched
+RoBERTa on accuracy and beat it on precision and weighted F1; the keyword
+baseline managed 0.513 F1, which shows how poorly rules handle paraphrased
+clauses.
+
+GPT-4.1-mini summaries scored a **BERTScore F1 of 0.786**, ahead of BART and
+PEGASUS on ROUGE-1, ROUGE-L and BERTScore.
+
+In a user study, five legal professionals saved **67% of their review time** on
+average compared with manual review, and rated the report 4.1/5 for clarity
+and 4.0/5 for tier accuracy.
+
+The paper was presented at ICCIS 2026 at BITS Pilani, K K Birla Goa Campus, in
+September 2026.
+
+## The Open Questions
+
+- **Single-label is a simplification.** CUAD is multi-label; the next step is
+  multi-label classification with sigmoid thresholds.
+- **Coverage.** CUAD is English commercial contracts only. Employment,
+  government and non-English documents are untested; MAUD and ACORD data, and
+  cross-lingual LegalBERT variants, are the obvious next steps.
+- **Upstream errors carry through.** Summaries depend on how well text is
+  extracted, and the tier mapping reflects three annotators' judgement, which
+  may not hold across jurisdictions or contract types.
+- **The user study was small.** Five reviewers is a strong signal, not proof.

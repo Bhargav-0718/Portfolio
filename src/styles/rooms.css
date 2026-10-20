@@ -1,0 +1,159 @@
+/*
+ * Rooms — doorway transitions and door illustrations.
+ */
+
+/* ---------------------------------------------------------------
+ * Doorway transitions (React <ViewTransition> + <Link transitionTypes>)
+ * Travelling east: the room you leave drifts west and dims; the next
+ * room arrives from the east as its lights come up.
+ * ------------------------------------------------------------- */
+
+::view-transition {
+  pointer-events: none;
+}
+
+/* The page shell swaps instantly; only the room itself moves. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* The header is the visitor's fixed reference point. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+::view-transition-old(.travel-east) {
+  --dx: -72px;
+  --dy: 0px;
+}
+::view-transition-new(.travel-east) {
+  --dx: 72px;
+  --dy: 0px;
+}
+::view-transition-old(.travel-west) {
+  --dx: 72px;
+  --dy: 0px;
+}
+::view-transition-new(.travel-west) {
+  --dx: -72px;
+  --dy: 0px;
+}
+::view-transition-old(.travel-north) {
+  --dx: 0px;
+  --dy: 56px;
+}
+::view-transition-new(.travel-north) {
+  --dx: 0px;
+  --dy: -56px;
+}
+::view-transition-old(.travel-south) {
+  --dx: 0px;
+  --dy: -56px;
+}
+::view-transition-new(.travel-south) {
+  --dx: 0px;
+  --dy: 56px;
+}
+
+::view-transition-old(.travel-east),
+::view-transition-old(.travel-west),
+::view-transition-old(.travel-north),
+::view-transition-old(.travel-south) {
+  animation: room-leave 260ms var(--ease-exit) both;
+}
+
+::view-transition-new(.travel-east),
+::view-transition-new(.travel-west),
+::view-transition-new(.travel-north),
+::view-transition-new(.travel-south) {
+  animation: room-enter 640ms var(--ease-archive) 140ms both;
+}
+
+@keyframes room-leave {
+  to {
+    opacity: 0;
+    translate: var(--dx) var(--dy);
+    scale: 1.02;
+    filter: brightness(0.45);
+  }
+}
+
+@keyframes room-enter {
+  from {
+    opacity: 0;
+    translate: var(--dx) var(--dy);
+    scale: 0.985;
+    filter: brightness(0.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+ * Door illustration (Doorways)
+ * ------------------------------------------------------------- */
+
+.door-frame {
+  position: relative;
+  flex: none;
+  width: 3.25rem;
+  height: 5rem;
+  border: 2px solid var(--line-strong);
+  border-bottom-width: 0;
+  perspective: 240px;
+  background: var(--surface-sunken);
+}
+
+/* Light from the next room, revealed as the door swings. */
+.door-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--color-paper) 55%, transparent),
+    color-mix(in oklab, var(--color-oxide-light) 30%, transparent)
+  );
+}
+
+.door-panel {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgb(255 255 255 / 0.04), transparent 40%), var(--color-obsidian-raised);
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 0 0 4px var(--color-obsidian-raised),
+    inset 0 0 0 5px var(--line);
+  transform-origin: left center;
+  transition: transform var(--duration-slow) var(--ease-archive);
+}
+
+.door-knob {
+  position: absolute;
+  right: 6px;
+  top: 52%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-oxide);
+}
+
+.door:hover .door-panel,
+.door:focus-visible .door-panel {
+  transform: rotateY(-62deg);
+}

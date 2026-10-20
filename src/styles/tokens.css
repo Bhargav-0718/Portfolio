@@ -1,0 +1,125 @@
+/*
+ * THE UNFINISHED ARCHIVE — design tokens
+ * ---------------------------------------------------------------
+ * Two layers:
+ *   1. Raw palette (@theme)  → bg-obsidian, text-oxide, etc.
+ *   2. Semantic roles        → bg-surface, text-fg, text-accent …
+ *      Semantic roles flip automatically inside `.surface-paper`,
+ *      so a component written once works on dark and on paper.
+ *
+ * Contrast (WCAG, against the surface they sit on):
+ *   fg on obsidian 13.6:1 · fg-muted on obsidian 4.8:1
+ *   accent (#C98058) on obsidian 5.6:1 · field on obsidian 4.6:1
+ *   accent (#8E4F2C) on paper 4.9:1 · field (#4F6157) on paper 5.1:1
+ *   #B76E45 (oxide) on obsidian 4.5:1 → large text, rules and marks only.
+ */
+
+@theme {
+  /* ---- Raw palette ---- */
+  --color-obsidian: #191919;
+  --color-obsidian-deep: #111110;
+  --color-obsidian-raised: #212120;
+  --color-paper: #e9e2d5;
+  --color-paper-dim: #d9d1c2;
+  --color-paper-deep: #c9bfad;
+  --color-oxide: #b76e45;
+  --color-oxide-light: #c98058;
+  --color-oxide-deep: #8e4f2c;
+  --color-field: #75877d;
+  --color-field-deep: #4f6157;
+  --color-ash: #8a857c;
+  --color-ash-dim: #5e5a54;
+  --color-graphite: #34322f;
+
+  /* ---- Type families ---- */
+  --font-serif: var(--font-newsreader), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* ---- Type scale ----
+   * Fluid between 375px and 1440px viewports.
+   * Display sizes are rare: one per page at most. */
+  --text-label: 0.6875rem; /* 11px mono labels */
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.08em;
+  --text-meta: 0.8125rem; /* 13px captions, metadata */
+  --text-meta--line-height: 1.5;
+  --text-body: 1.0625rem; /* 17px reading text */
+  --text-body--line-height: 1.65;
+  --text-lede: clamp(1.1875rem, 1.08rem + 0.45vw, 1.4375rem);
+  --text-lede--line-height: 1.5;
+  --text-title: clamp(1.5rem, 1.3rem + 0.85vw, 2.125rem);
+  --text-title--line-height: 1.2;
+  --text-headline: clamp(2.125rem, 1.6rem + 2.25vw, 3.75rem);
+  --text-headline--line-height: 1.08;
+  --text-display: clamp(2.75rem, 1.7rem + 4.5vw, 6rem);
+  --text-display--line-height: 1;
+
+  /* ---- Layout ---- */
+  --container-archive: 90rem; /* 1440px outer frame */
+  --container-reading: 42rem; /* ~68ch measure for long text */
+  --spacing-gutter: clamp(1rem, 0.6rem + 1.7vw, 2.5rem);
+  --spacing-section: clamp(5rem, 3.5rem + 6vw, 10rem);
+
+  /* ---- Motion ---- (mirrors src/lib/motion.ts) */
+  --ease-archive: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --duration-instant: 120ms;
+  --duration-quick: 200ms;
+  --duration-base: 360ms;
+  --duration-slow: 640ms;
+  --duration-reveal: 900ms;
+
+  --radius-sharp: 2px;
+}
+
+/* ---- Semantic roles (dark is the default surface) ---- */
+:root {
+  --surface: var(--color-obsidian);
+  --surface-raised: var(--color-obsidian-raised);
+  --surface-sunken: var(--color-obsidian-deep);
+  --fg: var(--color-paper);
+  --fg-muted: var(--color-ash);
+  --fg-faint: var(--color-ash-dim);
+  --accent: var(--color-oxide-light);
+  --accent-mark: var(--color-oxide);
+  --finding: var(--color-field);
+  --line: var(--color-graphite);
+  --line-strong: var(--color-ash-dim);
+  --focus: var(--color-oxide-light);
+  color-scheme: dark;
+}
+
+/* Paper panels: evidence documents, notes, selected exhibits. */
+.surface-paper {
+  --surface: var(--color-paper);
+  --surface-raised: #f1ebe0;
+  --surface-sunken: var(--color-paper-dim);
+  --fg: var(--color-obsidian);
+  --fg-muted: #5a554d;
+  --fg-faint: #7a7368;
+  --accent: var(--color-oxide-deep);
+  --accent-mark: var(--color-oxide-deep);
+  --finding: var(--color-field-deep);
+  --line: var(--color-paper-deep);
+  --line-strong: #a39885;
+  --focus: var(--color-oxide-deep);
+  color-scheme: light;
+  background-color: var(--surface);
+  color: var(--fg);
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-faint: var(--fg-faint);
+  --color-accent: var(--accent);
+  --color-accent-mark: var(--accent-mark);
+  --color-finding: var(--finding);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+}

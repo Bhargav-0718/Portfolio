@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 430" role="img" aria-labelledby="t d">
+  <title id="t">Contract analysis framework: system architecture</title>
+  <desc id="d">A contract (PDF or DOC) is uploaded, its text extracted and segmented into clauses. A fine-tuned LegalBERT model classifies each clause into one of 47 CUAD categories. Each category maps to one of five expert-validated criticality tiers. GPT-4.1-mini writes a hierarchical summary from overlapping chunks. The system outputs a PDF report with tier distribution and clause analytics, plus a CSV. A Streamlit dashboard connects input and output.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#191919"/>
+    </marker>
+    <style>
+      .box { fill: #f3eee5; stroke: #191919; stroke-width: 1.25; }
+      .inner { fill: none; stroke: #7a7368; stroke-width: 1; }
+      .step { font: 500 10.5px ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.08em; fill: #8e4f2c; }
+      .name { font: 17px Georgia, 'Times New Roman', serif; fill: #191919; }
+      .note { font: 11.5px ui-monospace, Menlo, Consolas, monospace; fill: #5a554d; }
+      .tier { font: 11px ui-monospace, Menlo, Consolas, monospace; fill: #191919; }
+      .line { stroke: #191919; stroke-width: 1.25; fill: none; }
+      .meta { font: 10.5px ui-monospace, Menlo, Consolas, monospace; fill: #7a7368; }
+    </style>
+  </defs>
+
+  <!-- 01 Input -->
+  <rect class="box" x="10" y="20" width="170" height="250"/>
+  <text class="step" x="24" y="44">01 · INPUT</text>
+  <text class="name" x="24" y="70">User contract</text>
+  <text class="note" x="24" y="90">PDF / DOC upload</text>
+  <rect class="inner" x="24" y="150" width="142" height="100"/>
+  <text class="note" x="34" y="176">Text extraction</text>
+  <text class="note" x="34" y="194">&amp; clause</text>
+  <text class="note" x="34" y="212">segmentation</text>
+
+  <path class="line" d="M180 145 H200" marker-end="url(#a)"/>
+
+  <!-- 02 Classification -->
+  <rect class="box" x="204" y="20" width="170" height="250"/>
+  <text class="step" x="218" y="44">02 · CLASSIFY</text>
+  <text class="name" x="218" y="70">Fine-tuned</text>
+  <text class="name" x="218" y="92">LegalBERT</text>
+  <text class="note" x="218" y="118">47 CUAD clause</text>
+  <text class="note" x="218" y="134">categories</text>
+  <rect class="inner" x="218" y="160" width="142" height="90"/>
+  <text class="meta" x="228" y="180">PREDICTED LABELS</text>
+  <text class="note" x="228" y="200">Termination</text>
+  <text class="note" x="228" y="216">Liability</text>
+  <text class="note" x="228" y="232">IP ownership …</text>
+
+  <path class="line" d="M374 145 H394" marker-end="url(#a)"/>
+
+  <!-- 03 Tiers -->
+  <rect class="box" x="398" y="20" width="170" height="250"/>
+  <text class="step" x="412" y="44">03 · PRIORITISE</text>
+  <text class="name" x="412" y="70">Five-tier</text>
+  <text class="name" x="412" y="92">criticality</text>
+  <rect x="412" y="112" width="142" height="24" fill="#f3eee5" stroke="#8e4f2c" stroke-width="1.5"/>
+  <text class="tier" x="422" y="128">Tier 1 · Critical</text>
+  <rect class="inner" x="412" y="141" width="142" height="24"/>
+  <text class="tier" x="422" y="157">Tier 2 · Moderate</text>
+  <rect class="inner" x="412" y="170" width="142" height="24"/>
+  <text class="tier" x="422" y="186">Tier 3 · Important</text>
+  <rect class="inner" x="412" y="199" width="142" height="24"/>
+  <text class="tier" x="422" y="215">Tier 4 · Low</text>
+  <rect x="412" y="228" width="142" height="24" fill="none" stroke="#4f6157" stroke-width="1.5"/>
+  <text class="tier" x="422" y="244">Tier 5 · Trivial</text>
+
+  <path class="line" d="M568 145 H588" marker-end="url(#a)"/>
+
+  <!-- 04 Summarise -->
+  <rect class="box" x="592" y="20" width="170" height="250"/>
+  <text class="step" x="606" y="44">04 · SUMMARISE</text>
+  <text class="name" x="606" y="70">GPT-4.1-mini</text>
+  <text class="note" x="606" y="96">Overlapping chunks</text>
+  <text class="note" x="606" y="112">2,500 chars,</text>
+  <text class="note" x="606" y="128">200 overlap</text>
+  <path class="line" d="M677 142 V170" marker-end="url(#a)"/>
+  <rect class="inner" x="606" y="174" width="142" height="76"/>
+  <text class="note" x="616" y="198">Hierarchical</text>
+  <text class="note" x="616" y="214">summary,</text>
+  <text class="note" x="616" y="230">200–250 words</text>
+
+  <path class="line" d="M762 145 H782" marker-end="url(#a)"/>
+
+  <!-- 05 Report -->
+  <rect class="box" x="786" y="20" width="164" height="250"/>
+  <text class="step" x="800" y="44">05 · REPORT</text>
+  <text class="name" x="800" y="70">PDF report</text>
+  <text class="name" x="800" y="92">+ CSV</text>
+  <text class="note" x="800" y="122">Tier distribution</text>
+  <text class="note" x="800" y="140">Clause analytics</text>
+  <text class="note" x="800" y="158">Visualisations</text>
+  <text class="note" x="800" y="176">Summary</text>
+
+  <!-- Streamlit dashboard joins input and output -->
+  <path class="line" d="M95 270 V355 H382" marker-end="url(#a)"/>
+  <path class="line" d="M868 270 V355 H582" marker-end="url(#a)"/>
+  <rect class="box" x="386" y="325" width="192" height="60"/>
+  <text class="step" x="400" y="349">INTERFACE</text>
+  <text class="name" x="400" y="372">Streamlit dashboard</text>
+
+  <!-- Provenance -->
+  <text class="meta" x="10" y="412">Redrawn for this site from Fig. 1 of “NLP-Driven Clause Classification and Summarization for Contract Documents” (ICCIS 2026).</text>
+</svg>

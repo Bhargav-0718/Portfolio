@@ -1,0 +1,253 @@
+/*
+ * The Lobby — arrival scene, building directory, and the doorway glimpse
+ * into the Record Room. All decorative layers are aria-hidden.
+ */
+
+/* ---------------------------------------------------------------
+ * Arrival: a lobby wall washed by a row of downlights,
+ * over a polished stone floor.
+ * ------------------------------------------------------------- */
+
+.lobby-arrival {
+  --light: 255 232 196;
+  --floor-h: clamp(3.5rem, 9svh, 6rem);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: clamp(38rem, calc(100svh - 4rem), 60rem);
+  padding-block: clamp(4.5rem, 10svh, 7rem) calc(var(--floor-h) + 3rem);
+}
+
+.lobby-wall {
+  position: absolute;
+  inset: 0 0 var(--floor-h);
+  z-index: -3;
+  background:
+    radial-gradient(ellipse 95% 85% at 50% 25%, transparent 40%, rgb(0 0 0 / 0.5) 100%),
+    linear-gradient(to bottom, #1c1b1a, #211f1d 60%, #1a1918);
+}
+
+.lobby-lights {
+  position: absolute;
+  inset: 0 0 var(--floor-h);
+  z-index: -2;
+  display: flex;
+  justify-content: space-around;
+  pointer-events: none;
+}
+
+.lobby-downlight {
+  position: relative;
+  width: 1px;
+}
+
+/* The fitting, recessed in the ceiling. */
+.lobby-downlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: 1.6rem;
+  height: 0.3rem;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  background: radial-gradient(ellipse at 50% 0, #fff6e4, #d9c5a0 60%, #6d6253);
+  box-shadow: 0 0 14px 3px rgb(var(--light) / 0.45);
+  animation: lamp-on 1.4s linear both;
+  animation-delay: calc(0.2s + var(--i) * 110ms);
+}
+
+/* The scallop of light it throws down the wall. */
+.lobby-downlight::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: clamp(7rem, 12vw, 11rem);
+  height: 78%;
+  background: radial-gradient(
+    ellipse 50% 100% at 50% 0,
+    rgb(var(--light) / 0.12),
+    rgb(var(--light) / 0.035) 55%,
+    transparent 80%
+  );
+  animation: lamp-on 1.4s linear both;
+  animation-delay: calc(0.2s + var(--i) * 110ms);
+}
+
+@media (max-width: 47.99rem) {
+  .lobby-downlight:nth-child(n + 5) {
+    display: none;
+  }
+}
+
+/* Polished stone: slab joints, a sheen, and the lights reflected. */
+.lobby-floor {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--floor-h);
+  border-top: 1px solid rgb(255 255 255 / 0.07);
+  background:
+    linear-gradient(to bottom, rgb(var(--light) / 0.06), transparent 75%),
+    repeating-linear-gradient(90deg, transparent 0 calc(20% - 1px), rgb(0 0 0 / 0.4) calc(20% - 1px) 20%),
+    linear-gradient(to bottom, #272624, #121110);
+}
+
+/* ---------------------------------------------------------------
+ * Building directory: a black felt letter board in a metal frame.
+ * ------------------------------------------------------------- */
+
+.directory-board {
+  position: relative;
+  padding: 1.25rem 1.1rem 1.4rem;
+  border: 0.55rem solid;
+  border-image: linear-gradient(160deg, #a19e98, #56534f 38%, #8e8b85 62%, #3d3b38) 1;
+  background:
+    radial-gradient(ellipse 85% 35% at 50% 0, rgb(255 232 196 / 0.07), transparent 80%),
+    repeating-linear-gradient(to bottom, #151515 0 0.42rem, #090909 0.42rem 0.5rem), #121212;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.6),
+    0 30px 60px -20px rgb(0 0 0 / 0.9);
+}
+
+/* White plastic letters pressed into felt. */
+.db-letters {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #ecebe4;
+  text-shadow:
+    0 1px 0 rgb(0 0 0 / 0.85),
+    0 0 1px rgb(255 255 255 / 0.25);
+}
+
+.db-leader {
+  flex: 1;
+  min-width: 1rem;
+  translate: 0 -0.3em;
+  border-bottom: 2px dotted rgb(236 235 228 / 0.35);
+}
+
+/* ---------------------------------------------------------------
+ * Glimpse: the Record Room seen through a doorway in the lobby wall.
+ * ------------------------------------------------------------- */
+
+.glimpse {
+  --light: 255 232 196;
+  --frame-w: clamp(7rem, 22vw, 9.5rem);
+  display: block;
+  max-width: 24rem;
+}
+
+/* Door casing set into the wall. */
+.glimpse-casing {
+  display: block;
+  padding: 0.7rem 0.7rem 0;
+  background: linear-gradient(to bottom, #2c2a27, #201f1d);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.05),
+    0 24px 40px -18px rgb(0 0 0 / 0.9);
+}
+
+.glimpse-room {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 3 / 4.2;
+  box-shadow: inset 0 0 40px 10px rgb(0 0 0 / 0.75);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 calc(4rem - 1px), rgb(0 0 0 / 0.35) calc(4rem - 1px) 4rem),
+    linear-gradient(to bottom, #1c1e20, #25272b 60%, #1d1f21);
+}
+
+.glimpse-scene {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transition: scale var(--duration-slow) var(--ease-archive);
+}
+
+.glimpse-cone {
+  position: absolute;
+  top: 1.6rem;
+  bottom: 12%;
+  left: 50%;
+  translate: -50% 0;
+  width: 150%;
+  clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+  background: linear-gradient(to bottom, rgb(var(--light) / 0.3), rgb(var(--light) / 0.04));
+  filter: blur(6px);
+}
+
+.glimpse-lamp {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: 3.2rem;
+  height: 1.6rem;
+  background: linear-gradient(to bottom, #3b3936 0 0.9rem, transparent 0.9rem) 50% 0 / 2px 0.9rem no-repeat;
+}
+
+.glimpse-lamp::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0.75rem;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: linear-gradient(to right, #151514, #3d3b38 40%, #121211);
+  box-shadow:
+    0 2px 0 -1px #b8924a,
+    0 4px 10px rgb(var(--light) / 0.6);
+}
+
+.glimpse-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 12%;
+  border-top: 0.3rem solid #161514;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 calc(1.1rem - 1px),
+      rgb(0 0 0 / 0.5) calc(1.1rem - 1px) 1.1rem
+    ),
+    linear-gradient(to bottom, #3a2a1d, #1a120c);
+}
+
+.glimpse-art {
+  position: relative;
+  width: var(--frame-w);
+  margin-top: -6%;
+  transition: scale var(--duration-slow) var(--ease-archive);
+}
+
+/* Hovering the doorway: you lean in. */
+.glimpse:hover .glimpse-art,
+.glimpse:focus-visible .glimpse-art,
+.glimpse:hover .glimpse-scene,
+.glimpse:focus-visible .glimpse-scene {
+  scale: 1.04;
+}
+
+/* Threshold strip under the door. */
+.glimpse-threshold {
+  display: block;
+  height: 0.5rem;
+  background: linear-gradient(to bottom, #3a3835, #1b1a19);
+}

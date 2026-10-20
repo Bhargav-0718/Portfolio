@@ -1,0 +1,173 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/atmosphere.css";
+@import "../styles/rooms.css";
+@import "../styles/record-room.css";
+@import "../styles/lobby.css";
+@import "../styles/museum.css";
+@import "../styles/wings.css";
+
+/* ---------------------------------------------------------------
+ * Base
+ * ------------------------------------------------------------- */
+
+@layer base {
+  html {
+    background-color: var(--surface);
+    color: var(--fg);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--surface);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  ::selection {
+    background-color: var(--color-oxide);
+    color: var(--color-paper);
+  }
+
+  /* Headings default to the editorial serif. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One focus style everywhere; never removed, only restyled. */
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: var(--radius-sharp);
+  }
+
+  hr {
+    border-color: var(--line);
+  }
+}
+
+/* ---------------------------------------------------------------
+ * Typographic utilities
+ * ------------------------------------------------------------- */
+
+/* Mono exhibit label: "CF-001", "EXHIBIT 04", timestamps. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+}
+
+/* Small mono metadata that stays in sentence case. */
+@utility meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+}
+
+/* Reading measure for long-form text. */
+@utility measure {
+  max-width: var(--container-reading);
+}
+
+/* Outer page frame with responsive gutters and safe areas. */
+@utility frame {
+  width: 100%;
+  max-width: var(--container-archive);
+  margin-inline: auto;
+  padding-inline: max(var(--spacing-gutter), env(safe-area-inset-left))
+    max(var(--spacing-gutter), env(safe-area-inset-right));
+}
+
+/* Visually hidden but available to assistive tech. */
+@utility sr-only-focusable {
+  &:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* ---------------------------------------------------------------
+ * Dialogs (<dialog data-sheet>): mobile index, résumé inspector,
+ * and later the evidence drawer. Native <dialog> handles focus + Escape.
+ * ------------------------------------------------------------- */
+
+dialog[data-sheet] {
+  opacity: 0;
+  translate: 0 10px;
+  transition:
+    opacity var(--duration-base) var(--ease-archive),
+    translate var(--duration-base) var(--ease-archive),
+    overlay var(--duration-base) allow-discrete,
+    display var(--duration-base) allow-discrete;
+}
+
+dialog[data-sheet][open] {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  dialog[data-sheet][open] {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+dialog[data-sheet]::backdrop {
+  background-color: rgb(8 8 8 / 0.7);
+}
+
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* A photograph "developing": used when an exhibit's image changes. */
+@keyframes develop {
+  from {
+    opacity: 0;
+    filter: blur(6px) sepia(0.6);
+  }
+}
+
+@utility animate-develop {
+  animation: develop var(--duration-slow) var(--ease-archive) both;
+}
+
+/* ---------------------------------------------------------------
+ * Reduced motion: keep state changes, drop movement.
+ * ------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

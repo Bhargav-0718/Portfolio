@@ -1,0 +1,307 @@
+/*
+ * The Record Room — the résumé hung as a painting.
+ * Wall, lamp, light, floor and frame are all CSS/SVG. Every layer here is
+ * decorative (aria-hidden); the information lives on the plaque and the
+ * visitor controls below the scene.
+ */
+
+.rr-scene {
+  /* Size of the hung artwork; everything else scales from it. */
+  --frame-w: clamp(13.5rem, min(72vw, 40svh), 25rem);
+  --lamp-h: clamp(7rem, 15svh, 10rem);
+  --floor-h: clamp(4.5rem, 12svh, 8rem);
+  --panel: 9rem;
+  --light: 255 232 196;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Fill the viewport below the header so the floor is always in view. */
+  min-height: clamp(36rem, calc(100svh - 4rem), 62rem);
+  padding: calc(var(--lamp-h) + 2rem) var(--spacing-gutter) calc(var(--floor-h) + 2rem);
+  background: #1a1b1c;
+}
+
+/* ---- Wall: panelled, slightly cool so the gilt reads warm ---- */
+.rr-wall {
+  position: absolute;
+  inset: 0 0 var(--floor-h);
+  z-index: -3;
+  background:
+    radial-gradient(ellipse 75% 85% at 50% 38%, transparent 35%, rgb(0 0 0 / 0.6) 100%),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 calc(var(--panel) - 2px),
+      rgb(0 0 0 / 0.38) calc(var(--panel) - 2px) calc(var(--panel) - 1px),
+      rgb(255 255 255 / 0.03) calc(var(--panel) - 1px) var(--panel)
+    ),
+    linear-gradient(to bottom, #1c1e20, #24262a 55%, #1d1f21);
+  background-position:
+    center,
+    calc(50% + var(--panel) / 2) 0,
+    center;
+}
+
+/* ---- Light: a pool on the wall and a cone from the lamp ---- */
+.rr-pool {
+  position: absolute;
+  z-index: -2;
+  top: calc(var(--lamp-h) - 1rem);
+  left: 50%;
+  translate: -50% 0;
+  width: calc(var(--frame-w) * 2.6);
+  height: calc(var(--frame-w) * 2.3);
+  background: radial-gradient(ellipse 48% 50% at 50% 42%, rgb(var(--light) / 0.17), transparent 72%);
+  animation: lamp-on 1.6s linear 0.25s both;
+}
+
+.rr-cone {
+  position: absolute;
+  z-index: -2;
+  top: calc(var(--lamp-h) - 0.5rem);
+  bottom: calc(var(--floor-h) - 1.5rem);
+  left: 50%;
+  translate: -50% 0;
+  width: calc(var(--frame-w) * 2.5);
+  clip-path: polygon(43% 0, 57% 0, 100% 100%, 0 100%);
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--light) / 0.26),
+    rgb(var(--light) / 0.09) 55%,
+    rgb(var(--light) / 0.03)
+  );
+  filter: blur(10px);
+  animation: lamp-on 1.6s linear 0.25s both;
+}
+
+/* ---- Lamp: ceiling canopy, rod, shade, bulb ---- */
+.rr-lamp {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 8.5rem;
+  height: var(--lamp-h);
+}
+
+.rr-lamp-canopy {
+  width: 2.25rem;
+  height: 0.4rem;
+  background: linear-gradient(#3b3936, #252422);
+  border-radius: 0 0 3px 3px;
+}
+
+.rr-lamp-rod {
+  flex: 1;
+  width: 2px;
+  background: linear-gradient(to right, #1c1b1a, #4a4743, #1c1b1a);
+}
+
+.rr-lamp-shade {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.5));
+}
+
+.rr-lamp-bulb {
+  animation: lamp-on 1.6s linear 0.25s both;
+}
+
+/* A fluorescent-style flicker, then steady. */
+@keyframes lamp-on {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.85;
+  }
+  12% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.3;
+  }
+  36%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ---- Floor: planks in perspective, with the light's reflection ---- */
+.rr-skirting {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: var(--floor-h);
+  height: 0.7rem;
+  background: linear-gradient(#272523, #141312);
+  box-shadow: 0 -1px 0 rgb(255 255 255 / 0.06);
+}
+
+.rr-floor {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--floor-h);
+  overflow: hidden;
+  background: #120e0b;
+}
+
+.rr-floor-planks {
+  --plank: 2.75rem;
+  position: absolute;
+  top: 0;
+  left: -60%;
+  right: -60%;
+  height: 300%;
+  transform-origin: top center;
+  transform: perspective(16rem) rotateX(60deg);
+  background:
+    radial-gradient(ellipse 20% 28% at 50% 0%, rgb(var(--light) / 0.2), transparent 75%),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 calc(var(--plank) - 1px),
+      rgb(0 0 0 / 0.55) calc(var(--plank) - 1px) var(--plank)
+    ),
+    linear-gradient(to bottom, #3a2a1d, #241910 55%, #150f0a);
+}
+
+/* ---- Wall text: vinyl lettering, like a gallery room title ---- */
+.rr-walltext {
+  order: 3;
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+@media (min-width: 48rem) {
+  .rr-walltext {
+    position: absolute;
+    top: 2.5rem;
+    left: var(--spacing-gutter);
+    margin: 0;
+    text-align: left;
+    max-width: 16rem;
+  }
+}
+
+/* ---------------------------------------------------------------
+ * Antique gilt frame
+ * Mitred mouldings come from four-coloured borders, lit from above:
+ * top brightest, bottom darkest. Then a reversed cove, a bead strip,
+ * a dark sight-edge lip, and a paper mount.
+ * ------------------------------------------------------------- */
+
+.gilt {
+  --gw: calc(var(--frame-w) * 0.055);
+  position: relative;
+  border: var(--gw) solid;
+  border-color: #d8b76d #8a6a2e #5a4118 #ad8a45;
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.55),
+    0 8px 16px rgb(0 0 0 / 0.5),
+    0 26px 50px -8px rgb(0 0 0 / 0.85);
+}
+
+/* Burnished sheen and fine carving texture on the outer moulding only. */
+.gilt::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--gw));
+  padding: var(--gw);
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 28%, rgb(255 244 210 / 0.35) 44%, transparent 58%),
+    repeating-linear-gradient(45deg, rgb(0 0 0 / 0.12) 0 1px, transparent 1px 4px);
+  mix-blend-mode: overlay;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+.gilt-cove {
+  border: calc(var(--gw) * 0.45) solid;
+  border-color: #5e4419 #b8954c #e3c47e #93712f;
+}
+
+.gilt-bead {
+  --bead: calc(var(--gw) * 0.34);
+  padding: var(--bead);
+  background: radial-gradient(circle at 45% 38%, #f3dc98 0 22%, #b08b42 48%, #4a3410 78%) 0 0 / var(--bead)
+    var(--bead);
+}
+
+.gilt-lip {
+  padding: 2px;
+  background: #24190a;
+}
+
+.gilt-mat {
+  position: relative;
+  padding: calc(var(--frame-w) * 0.075);
+  background: var(--color-paper);
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.12),
+    inset 0 10px 18px -12px rgb(0 0 0 / 0.6);
+}
+
+/* The lamp falls off toward the bottom of the painting. */
+.gilt-mat::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgb(var(--light) / 0.06), transparent 45%, rgb(0 0 0 / 0.18));
+}
+
+/* ---------------------------------------------------------------
+ * Brass plaque, screwed to the wall beside the painting
+ * ------------------------------------------------------------- */
+
+.brass-plaque {
+  position: relative;
+  padding: 0.9rem 1.1rem 1rem;
+  background:
+    linear-gradient(115deg, transparent 30%, rgb(255 246 214 / 0.35) 48%, transparent 62%),
+    linear-gradient(160deg, #d1b06c, #a0803f 42%, #c6a35d 62%, #86662c);
+  border: 1px solid #5c4317;
+  box-shadow:
+    inset 0 1px 0 rgb(255 248 220 / 0.5),
+    inset 0 -1px 0 rgb(0 0 0 / 0.25),
+    0 6px 14px rgb(0 0 0 / 0.55);
+  color: #2a1d08;
+  text-shadow: 0 1px 0 rgb(255 240 200 / 0.35);
+}
+
+/* Two screws. */
+.brass-plaque::before,
+.brass-plaque::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin-top: -2.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f0dca4, #6b5020 70%);
+}
+.brass-plaque::before {
+  left: 0.35rem;
+}
+.brass-plaque::after {
+  right: 0.35rem;
+}

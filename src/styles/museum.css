@@ -1,0 +1,249 @@
+/*
+ * The Museum of Unfinished Questions — the hall, the hung exhibits,
+ * the case-file folder, and the evidence drawer.
+ */
+
+/* ---------------------------------------------------------------
+ * The hall: a tall gallery wall under a ceiling track light
+ * ------------------------------------------------------------- */
+
+.hall {
+  --light: 255 232 196;
+  position: relative;
+  isolation: isolate;
+  /* Exhibit light pools spill past the frames; never let them widen the page. */
+  overflow-x: clip;
+}
+
+.hall-wall {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 0, rgb(var(--light) / 0.05), transparent 70%),
+    linear-gradient(to bottom, #1c1c1b, #1f1e1d 40%, #1a1a19);
+}
+
+/* The track: a rail along the ceiling with spot heads. */
+.hall-track {
+  position: absolute;
+  top: 0;
+  left: var(--spacing-gutter);
+  right: var(--spacing-gutter);
+  height: 0.9rem;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 50% 75%, #d8c7a6 0 2px, #4a4743 2.5px 5px, transparent 5.5px) 0 0 / 9rem 100%
+      repeat-x,
+    linear-gradient(to bottom, #3a3835, #242321) 0 0 / 100% 0.3rem no-repeat;
+}
+
+/* ---------------------------------------------------------------
+ * Hung exhibits: a question on paper in a thin black frame,
+ * a pool of light above it, a wall label beneath.
+ * ------------------------------------------------------------- */
+
+.exhibit {
+  position: relative;
+  display: block;
+  padding-top: 2.5rem;
+}
+
+.exhibit-light {
+  position: absolute;
+  z-index: -1;
+  top: -1rem;
+  left: 50%;
+  translate: -50% 0;
+  width: 130%;
+  height: 120%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 45% 55% at 50% 22%,
+    rgb(var(--light, 255 232 196) / 0.09),
+    transparent 75%
+  );
+  transition: opacity var(--duration-slow) var(--ease-archive);
+  opacity: 0.8;
+}
+
+.exhibit:hover .exhibit-light,
+.exhibit:focus-visible .exhibit-light {
+  opacity: 1.4;
+}
+
+.exhibit-frame {
+  display: block;
+  padding: 0.55rem;
+  background: #0e0e0d;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.06),
+    inset 0 1px 0 rgb(255 255 255 / 0.09),
+    0 2px 4px rgb(0 0 0 / 0.4),
+    0 26px 50px -16px rgb(0 0 0 / 0.8);
+  transition:
+    translate var(--duration-slow) var(--ease-archive),
+    box-shadow var(--duration-slow) var(--ease-archive);
+}
+
+.exhibit:hover .exhibit-frame,
+.exhibit:focus-visible .exhibit-frame {
+  translate: 0 -4px;
+}
+
+.exhibit-canvas {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 15rem;
+  padding: clamp(1.25rem, 0.8rem + 1.5vw, 2.25rem);
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.08),
+    inset 0 8px 16px -10px rgb(0 0 0 / 0.4);
+}
+
+/* ---------------------------------------------------------------
+ * Case-file folder: a manila-paper cover with a tab
+ * ------------------------------------------------------------- */
+
+.dossier {
+  position: relative;
+  margin-top: 2.25rem;
+  box-shadow: 0 30px 60px -28px rgb(0 0 0 / 0.95);
+}
+
+.dossier-tab {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  padding: 0.55rem 1.1rem 0.4rem;
+  background: var(--color-paper);
+  border-radius: 6px 6px 0 0;
+  color: var(--color-obsidian);
+}
+
+/* A rubber stamp, used once per file for unfinished cases. */
+.stamp {
+  display: inline-block;
+  padding: 0.35rem 0.7rem;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  rotate: -6deg;
+  opacity: 0.85;
+  mask-image: radial-gradient(circle at 30% 40%, black 60%, rgb(0 0 0 / 0.75) 100%);
+}
+
+/* ---------------------------------------------------------------
+ * Evidence drawer: bottom sheet on phones, side drawer on desktop
+ * ------------------------------------------------------------- */
+
+dialog[data-drawer] {
+  position: fixed;
+  inset: auto 0 0 0;
+  margin: 0;
+  width: 100%;
+  max-width: none;
+  height: 92dvh;
+  max-height: none;
+  padding: 0;
+  border-radius: 10px 10px 0 0;
+  opacity: 0;
+  translate: 0 24px;
+  transition:
+    opacity var(--duration-base) var(--ease-archive),
+    translate var(--duration-base) var(--ease-archive),
+    overlay var(--duration-base) allow-discrete,
+    display var(--duration-base) allow-discrete;
+}
+
+@media (min-width: 64rem) {
+  dialog[data-drawer] {
+    inset: 0 0 0 auto;
+    width: min(68rem, 94vw);
+    height: 100dvh;
+    border-radius: 0;
+    translate: 32px 0;
+  }
+}
+
+dialog[data-drawer][open] {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@starting-style {
+  dialog[data-drawer][open] {
+    opacity: 0;
+    translate: 0 24px;
+  }
+}
+
+@media (min-width: 64rem) {
+  @starting-style {
+    dialog[data-drawer][open] {
+      translate: 32px 0;
+    }
+  }
+}
+
+dialog[data-drawer]::backdrop {
+  background-color: rgb(8 8 8 / 0.65);
+}
+
+/* ---------------------------------------------------------------
+ * Stepping deeper: hall → case file zooms in; case file → hall out.
+ * ------------------------------------------------------------- */
+
+::view-transition-old(.travel-in) {
+  animation: deeper-leave 240ms var(--ease-exit) both;
+}
+::view-transition-new(.travel-in) {
+  animation: deeper-enter 560ms var(--ease-archive) 120ms both;
+}
+::view-transition-old(.travel-out) {
+  animation: shallower-leave 240ms var(--ease-exit) both;
+}
+::view-transition-new(.travel-out) {
+  animation: shallower-enter 560ms var(--ease-archive) 120ms both;
+}
+
+@keyframes deeper-leave {
+  to {
+    opacity: 0;
+    scale: 1.04;
+    filter: brightness(0.5);
+  }
+}
+@keyframes deeper-enter {
+  from {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+@keyframes shallower-leave {
+  to {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+@keyframes shallower-enter {
+  from {
+    opacity: 0;
+    scale: 1.03;
+    filter: brightness(0.5);
+  }
+}
+
+/* Exhibits re-hanging when a wing is chosen. */
+::view-transition-new(.exhibit-in) {
+  animation: deeper-enter 420ms var(--ease-archive) both;
+}
+::view-transition-old(.exhibit-out) {
+  animation: shallower-leave 200ms var(--ease-exit) both;
+}
